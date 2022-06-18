@@ -22,13 +22,13 @@ IMPORT_BATCHES = [
                 "parentId": None
             }
         ],
-        "updateDate": "05.01.1998"
+        "updateDate": "2022-02-02T12:00:00.000Z"
     },
     {
         "items": [
             {
                 "type": "CATEGORY",
-                "name": "Смартфоны",
+                "name": "Смартфон",
                 "id": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
                 "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
             },
@@ -37,7 +37,7 @@ IMPORT_BATCHES = [
                 "name": "jPhone 13",
                 "id": "863e1a7a-1304-42ae-943b-179184c077e3",
                 "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
-                "price": 79999
+                "price": 79991
             },
             {
                 "type": "OFFER",

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,8 +18,18 @@ public class Offer {
     private LocalDateTime dateTime;
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER)
-    private Set<Price> prices;
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Price> prices;
+
+    public Offer(String id, String name, LocalDateTime dateTime) {
+        this.id = id;
+        this.name = name;
+        this.dateTime = dateTime;
+    }
+
+    public Offer() {
+
+    }
 
     public String getId() {
         return id;
@@ -50,11 +63,11 @@ public class Offer {
         this.category = category;
     }
 
-    public Set<Price> getPrices() {
+    public List<Price> getPrices() {
         return prices;
     }
 
-    public void setPrices(Set<Price> prices) {
+    public void setPrices(List<Price> prices) {
         this.prices = prices;
     }
 }

@@ -14,4 +14,8 @@ public class CategoryServiceImpl implements CategoryService {
     public void addCategory(Category category) {
         categoryRepo.save(category);
     }
+
+    public Category findCategoryById(String id) {
+        return categoryRepo.findCategoryById(id);
+    }
 }

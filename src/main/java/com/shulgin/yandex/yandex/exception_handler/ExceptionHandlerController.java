@@ -16,5 +16,4 @@ public class ExceptionHandlerController {
         IncorrectInputData incorrectInputData = new IncorrectInputData(info, 400);
         return new ResponseEntity<>(incorrectInputData, HttpStatus.BAD_REQUEST);
     }
-
 }

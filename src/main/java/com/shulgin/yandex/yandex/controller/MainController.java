@@ -3,8 +3,10 @@ package com.shulgin.yandex.yandex.controller;
 import com.shulgin.yandex.yandex.dto.Item;
 import com.shulgin.yandex.yandex.dto.Items;
 import com.shulgin.yandex.yandex.entity.Category;
+import com.shulgin.yandex.yandex.entity.Offer;
 import com.shulgin.yandex.yandex.exception.ValidationException;
 import com.shulgin.yandex.yandex.service.CategoryService;
+import com.shulgin.yandex.yandex.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,9 @@ public class MainController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private OfferService offerService;
 
     @PostMapping("imports")
     public void imports(@RequestBody Items items) throws ValidationException{
@@ -31,15 +36,21 @@ public class MainController {
                 Category category = new Category(item.getId(), item.getName(), dateTime, item.getParentId());
                 categoryService.addCategory(category);
             } else if(item.getType().equals("OFFER")) {
-                //Offer offer = new Offer();
+                Offer offer = new Offer(item.getId(), item.getName(), dateTime);
+                offerService.addOffer(offer, item.getParentId(), item.getPrice());
             } else {
                 throw new ValidationException();
             }
         }
     }
 
-    @GetMapping("imports")
-    public void getR() {
-        System.out.println(111);
+    @GetMapping("imports/{id}")
+    public Category getR(@PathVariable String id) {
+        for (Offer o : categoryService.findCategoryById(id).getSet()) {
+            System.out.println(o.getName());
+            System.out.println(o.getPrices());
+        }
+        System.out.println();
+        return null;
     }
 }

@@ -1,20 +1,30 @@
 package com.shulgin.yandex.yandex.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import java.sql.Date;
-import java.sql.Time;
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 public class Price {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    private LocalDateTime dateTime;
+    private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "offer_id")
     private Offer offer;
-    private java.sql.Date date;
-    private java.sql.Time time;
+
+    public Price(LocalDateTime dateTime, BigDecimal price, Offer offer) {
+        this.dateTime = dateTime;
+        this.price = price;
+        this.offer = offer;
+    }
+
+    public Price() {
+
+    }
 
     public Long getId() {
         return id;
@@ -24,27 +34,28 @@ public class Price {
         this.id = id;
     }
 
-    public Offer getOffer() {
-        return offer;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setOffer(Offer offer) {
-        this.offer = offer;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public Date getDate() {
-        return date;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    @Override
+    public String toString() {
+        return "Price{" +
+                "id=" + id +
+                ", dateTime=" + dateTime +
+                ", price=" + price +
+                '}';
     }
 }
