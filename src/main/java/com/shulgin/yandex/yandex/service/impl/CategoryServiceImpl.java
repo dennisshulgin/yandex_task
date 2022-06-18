@@ -15,6 +15,15 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepo.save(category);
     }
 
+    public boolean deleteCategory(String id) {
+        Category category = categoryRepo.findCategoryById(id);
+        if(category == null) {
+            return false;
+        }
+        categoryRepo.delete(category);
+        return true;
+    }
+
     public Category findCategoryById(String id) {
         return categoryRepo.findCategoryById(id);
     }

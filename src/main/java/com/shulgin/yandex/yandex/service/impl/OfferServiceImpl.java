@@ -41,4 +41,13 @@ public class OfferServiceImpl implements OfferService {
         }
         offerRepo.save(offer);
     }
+
+    public boolean deleteOffer(String id) {
+        Offer offer = offerRepo.findOfferById(id);
+        if(offer == null) {
+            return false;
+        }
+        offerRepo.delete(offer);
+        return true;
+    }
 }

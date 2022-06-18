@@ -1,5 +1,8 @@
 package com.shulgin.yandex.yandex.entity;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -10,19 +13,24 @@ public class Category {
     private String id;
     private String name;
     private LocalDateTime dateTime;
-    private String parentCategory;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Category parentCategory;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private Set<Category> childrenCategory;
+
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Offer> set;
 
     public Category() {
     }
 
-    public Category(String id, String name, LocalDateTime dateTime, String parentCategory) {
+    public Category(String id, String name, LocalDateTime dateTime/*, String parentCategory*/) {
         this.id = id;
         this.name = name;
         this.dateTime = dateTime;
-        this.parentCategory = parentCategory;
+        //this.parentCategory = parentCategory;
     }
 
     public String getId() {

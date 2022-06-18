@@ -1,6 +1,8 @@
 package com.shulgin.yandex.yandex.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Offer {
     @Id
     private String id;
@@ -19,6 +20,7 @@ public class Offer {
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
     @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Price> prices;
 
     public Offer(String id, String name, LocalDateTime dateTime) {

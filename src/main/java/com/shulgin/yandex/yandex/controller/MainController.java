@@ -4,6 +4,7 @@ import com.shulgin.yandex.yandex.dto.Item;
 import com.shulgin.yandex.yandex.dto.Items;
 import com.shulgin.yandex.yandex.entity.Category;
 import com.shulgin.yandex.yandex.entity.Offer;
+import com.shulgin.yandex.yandex.exception.ItemNotFoundException;
 import com.shulgin.yandex.yandex.exception.ValidationException;
 import com.shulgin.yandex.yandex.service.CategoryService;
 import com.shulgin.yandex.yandex.service.OfferService;
@@ -41,6 +42,13 @@ public class MainController {
             } else {
                 throw new ValidationException();
             }
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable String id) throws ItemNotFoundException, ValidationException {
+        if(!(categoryService.deleteCategory(id) || offerService.deleteOffer(id))) {
+            throw new ItemNotFoundException();
         }
     }
 
