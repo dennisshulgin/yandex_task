@@ -1,44 +1,59 @@
 package com.shulgin.yandex.yandex.entity;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Category {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private String code;
     private String name;
     private LocalDateTime dateTime;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="parent_id", foreignKey=@ForeignKey(name = "FK_PARENT_ID"))
     private Category parentCategory;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<Category> childrenCategory;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "parent_id", updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Category> childrenCategory = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Offer> set;
+    private Set<Offer> offers;
 
     public Category() {
     }
 
-    public Category(String id, String name, LocalDateTime dateTime/*, String parentCategory*/) {
-        this.id = id;
+    public Category(String code, String name, LocalDateTime dateTime) {
+        this.code = code;
         this.name = name;
         this.dateTime = dateTime;
-        //this.parentCategory = parentCategory;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -57,11 +72,27 @@ public class Category {
         this.dateTime = dateTime;
     }
 
-    public Set<Offer> getSet() {
-        return set;
+    public Set<Offer> getOffers() {
+        return offers;
     }
 
-    public void setSet(Set<Offer> set) {
-        this.set = set;
+    public void setOffers(Set<Offer> set) {
+        this.offers = set;
     }
+
+    public Category getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(Category parentCategory) {
+        this.parentCategory = parentCategory;
+    }
+
+    /*public Set<Category> getChildrenCategory() {
+        return childrenCategory;
+    }
+
+    public void setChildrenCategory(Set<Category> childrenCategory) {
+        this.childrenCategory = childrenCategory;
+    }*/
 }

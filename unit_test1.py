@@ -30,7 +30,7 @@ IMPORT_BATCHES = [
                 "type": "CATEGORY",
                 "name": "Смартфон",
                 "id": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
-                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
+                "parentId": None
             },
             {
                 "type": "OFFER",
@@ -273,7 +273,7 @@ def test_all():
     #test_nodes()
     #test_sales()
     #test_stats()
-    #test_delete()
+    test_delete()
 
 
 def main():

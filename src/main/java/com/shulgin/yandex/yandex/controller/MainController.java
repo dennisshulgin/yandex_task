@@ -8,6 +8,7 @@ import com.shulgin.yandex.yandex.exception.ItemNotFoundException;
 import com.shulgin.yandex.yandex.exception.ValidationException;
 import com.shulgin.yandex.yandex.service.CategoryService;
 import com.shulgin.yandex.yandex.service.OfferService;
+import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +35,8 @@ public class MainController {
         }
         for (Item item : items.getItems()) {
             if(item.getType().equals("CATEGORY")) {
-                Category category = new Category(item.getId(), item.getName(), dateTime, item.getParentId());
-                categoryService.addCategory(category);
+                Category category = new Category(item.getId(), item.getName(), dateTime);
+                categoryService.addCategory(category, item.getParentId());
             } else if(item.getType().equals("OFFER")) {
                 Offer offer = new Offer(item.getId(), item.getName(), dateTime);
                 offerService.addOffer(offer, item.getParentId(), item.getPrice());
@@ -52,9 +53,9 @@ public class MainController {
         }
     }
 
-    @GetMapping("imports/{id}")
-    public Category getR(@PathVariable String id) {
-        for (Offer o : categoryService.findCategoryById(id).getSet()) {
+    @GetMapping("imports/{code}")
+    public Category getR(@PathVariable String code) {
+        for (Offer o : categoryService.findCategoryByCode(code).getOffers()) {
             System.out.println(o.getName());
             System.out.println(o.getPrices());
         }

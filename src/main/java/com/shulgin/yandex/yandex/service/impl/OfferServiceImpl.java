@@ -20,8 +20,8 @@ public class OfferServiceImpl implements OfferService {
     @Autowired
     private CategoryService categoryService;
 
-    public void addOffer(Offer offer, String parentId, BigDecimal price) {
-        Category category = categoryService.findCategoryById(parentId);
+    public void addOffer(Offer offer, String parentCode, BigDecimal price) {
+        Category category = categoryService.findCategoryByCode(parentCode);
         Offer oldOffer = offerRepo.findOfferById(offer.getId());
         if (oldOffer == null) {
             offer.setCategory(category);
