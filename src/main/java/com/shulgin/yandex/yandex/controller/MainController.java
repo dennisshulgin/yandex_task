@@ -2,19 +2,22 @@ package com.shulgin.yandex.yandex.controller;
 
 import com.shulgin.yandex.yandex.dto.Item;
 import com.shulgin.yandex.yandex.dto.Items;
+import com.shulgin.yandex.yandex.response.NodeResponse;
 import com.shulgin.yandex.yandex.entity.Category;
 import com.shulgin.yandex.yandex.entity.Offer;
 import com.shulgin.yandex.yandex.exception.ItemNotFoundException;
 import com.shulgin.yandex.yandex.exception.ValidationException;
 import com.shulgin.yandex.yandex.service.CategoryService;
 import com.shulgin.yandex.yandex.service.OfferService;
-import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import static com.shulgin.yandex.yandex.util.ResponseUtils.buildCategory;
+import static com.shulgin.yandex.yandex.util.ResponseUtils.buildOffer;
 
 @RestController
 public class MainController {
@@ -27,9 +30,9 @@ public class MainController {
 
     @PostMapping("imports")
     public void imports(@RequestBody Items items) throws ValidationException{
-        LocalDateTime dateTime;
+        OffsetDateTime dateTime;
         try {
-            dateTime  = LocalDateTime.parse(items.getUpdateDate(), DateTimeFormatter.ISO_DATE_TIME);
+            dateTime  = OffsetDateTime.parse(items.getUpdateDate(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         } catch (DateTimeParseException e) {
             throw new ValidationException();
         }
@@ -46,20 +49,22 @@ public class MainController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("delete/{id}")
     public void delete(@PathVariable String id) throws ItemNotFoundException, ValidationException {
         if(!(categoryService.deleteCategory(id) || offerService.deleteOffer(id))) {
             throw new ItemNotFoundException();
         }
     }
 
-    @GetMapping("imports/{code}")
-    public Category getR(@PathVariable String code) {
-        for (Offer o : categoryService.findCategoryByCode(code).getOffers()) {
-            System.out.println(o.getName());
-            System.out.println(o.getPrices());
+    @GetMapping("nodes/{id}")
+    public NodeResponse nodes(@PathVariable String id) throws ItemNotFoundException, ValidationException {
+        Category category = categoryService.findCategoryByCode(id);
+        Offer offer = offerService.findOfferById(id);
+        if(offer != null) {
+            return buildOffer(offer);
+        } else if(category != null) {
+            return buildCategory(category);
         }
-        System.out.println();
-        return null;
+        throw new ItemNotFoundException();
     }
 }

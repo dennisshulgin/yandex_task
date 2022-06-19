@@ -22,6 +22,6 @@ public class ExceptionHandlerController {
     public ResponseEntity<IncorrectInputData> itemNotFoundExceptionHandler(ItemNotFoundException e) {
         String message = "Item not found";
         IncorrectInputData incorrectInputData = new IncorrectInputData(message, 404);
-        return new ResponseEntity<>(incorrectInputData, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(incorrectInputData, HttpStatus.NOT_FOUND);
     }
 }

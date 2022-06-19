@@ -2,15 +2,13 @@ package com.shulgin.yandex.yandex.dto;
 
 import com.fasterxml.jackson.annotation.*;
 
-import java.math.BigDecimal;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
     private String type;
     private String name;
     private String id;
     private String parentId;
-    private BigDecimal price;
+    private long price;
 
     public String getType() {
         return type;
@@ -44,22 +42,11 @@ public class Item {
         this.parentId = parentId;
     }
 
-    public BigDecimal getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(long price) {
         this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "type='" + type + '\'' +
-                ", name='" + name + '\'' +
-                ", id='" + id + '\'' +
-                ", parentId='" + parentId + '\'' +
-                ", price=" + price +
-                '}';
     }
 }

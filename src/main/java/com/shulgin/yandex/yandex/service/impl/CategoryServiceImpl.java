@@ -3,9 +3,10 @@ package com.shulgin.yandex.yandex.service.impl;
 import com.shulgin.yandex.yandex.entity.Category;
 import com.shulgin.yandex.yandex.repository.CategoryRepo;
 import com.shulgin.yandex.yandex.service.CategoryService;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.OffsetDateTime;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -13,6 +14,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepo categoryRepo;
 
     public void addCategory(Category category, String parentCategory) {
+        OffsetDateTime dateTime = category.getDateTime();
         Category currentCategory = categoryRepo.findCategoryByCode(category.getCode());
         Category parent = categoryRepo.findCategoryByCode(parentCategory);
         if(currentCategory != null) {
@@ -22,6 +24,12 @@ public class CategoryServiceImpl implements CategoryService {
             category.setParentCategory(parent);
             categoryRepo.save(category);
         }
+        while(parent != null) {
+            parent.setDateTime(dateTime);
+            categoryRepo.save(parent);
+            parent = parent.getParentCategory();
+        }
+
     }
 
     public boolean deleteCategory(String code) {
@@ -36,5 +44,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     public Category findCategoryByCode(String code) {
         return categoryRepo.findCategoryByCode(code);
+    }
+
+    public void saveCategory(Category category) {
+        categoryRepo.save(category);
     }
 }

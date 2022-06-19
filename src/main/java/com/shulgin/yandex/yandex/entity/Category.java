@@ -1,14 +1,12 @@
 package com.shulgin.yandex.yandex.entity;
 
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Category {
@@ -17,7 +15,7 @@ public class Category {
     private long id;
     private String code;
     private String name;
-    private LocalDateTime dateTime;
+    private OffsetDateTime dateTime;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="parent_id", foreignKey=@ForeignKey(name = "FK_PARENT_ID"))
     private Category parentCategory;
@@ -29,12 +27,12 @@ public class Category {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Offer> offers;
+    private List<Offer> offers;
 
     public Category() {
     }
 
-    public Category(String code, String name, LocalDateTime dateTime) {
+    public Category(String code, String name, OffsetDateTime dateTime) {
         this.code = code;
         this.name = name;
         this.dateTime = dateTime;
@@ -64,19 +62,19 @@ public class Category {
         this.name = name;
     }
 
-    public LocalDateTime getDateTime() {
+    public OffsetDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(OffsetDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
-    public Set<Offer> getOffers() {
+    public List<Offer> getOffers() {
         return offers;
     }
 
-    public void setOffers(Set<Offer> set) {
+    public void setOffers(List<Offer> set) {
         this.offers = set;
     }
 
@@ -88,11 +86,11 @@ public class Category {
         this.parentCategory = parentCategory;
     }
 
-    /*public Set<Category> getChildrenCategory() {
+    public List<Category> getChildrenCategory() {
         return childrenCategory;
     }
 
-    public void setChildrenCategory(Set<Category> childrenCategory) {
+    public void setChildrenCategory(List<Category> childrenCategory) {
         this.childrenCategory = childrenCategory;
-    }*/
+    }
 }

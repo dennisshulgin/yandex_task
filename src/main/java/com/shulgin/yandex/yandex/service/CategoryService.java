@@ -8,4 +8,5 @@ public interface CategoryService {
     void addCategory(Category category, String parentCategory);
     Category findCategoryByCode(String Code);
     boolean deleteCategory(String code);
+    void saveCategory(Category category);
 }

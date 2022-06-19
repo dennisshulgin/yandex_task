@@ -9,7 +9,7 @@ import com.shulgin.yandex.yandex.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 @Service
@@ -20,7 +20,8 @@ public class OfferServiceImpl implements OfferService {
     @Autowired
     private CategoryService categoryService;
 
-    public void addOffer(Offer offer, String parentCode, BigDecimal price) {
+    public void addOffer(Offer offer, String parentCode, long price) {
+        OffsetDateTime dateTime = offer.getDateTime();
         Category category = categoryService.findCategoryByCode(parentCode);
         Offer oldOffer = offerRepo.findOfferById(offer.getId());
         if (oldOffer == null) {
@@ -34,12 +35,17 @@ public class OfferServiceImpl implements OfferService {
             Price newPrice = new Price(offer.getDateTime(), price, offer);
             List<Price> prices = oldOffer.getPrices();
             Price lastPrice = prices.get(prices.size() - 1);
-            if(newPrice.getPrice().compareTo(lastPrice.getPrice()) != 0) {
+            if(newPrice.getPrice() != lastPrice.getPrice()) {
                 prices.add(newPrice);
             }
             offer.setPrices(prices);
         }
         offerRepo.save(offer);
+        while(category != null) {
+            category.setDateTime(dateTime);
+            categoryService.saveCategory(category);
+            category = category.getParentCategory();
+        }
     }
 
     public boolean deleteOffer(String id) {
@@ -49,5 +55,9 @@ public class OfferServiceImpl implements OfferService {
         }
         offerRepo.delete(offer);
         return true;
+    }
+
+    public Offer findOfferById(String id) {
+        return offerRepo.findOfferById(id);
     }
 }

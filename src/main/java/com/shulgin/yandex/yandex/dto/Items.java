@@ -2,8 +2,6 @@ package com.shulgin.yandex.yandex.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Arrays;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Items {
     private Item[] items;
@@ -23,13 +21,5 @@ public class Items {
 
     public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
-    }
-
-    @Override
-    public String toString() {
-        return "Items{" +
-                "items=" + Arrays.toString(items) +
-                ", updateDate='" + updateDate + '\'' +
-                '}';
     }
 }
