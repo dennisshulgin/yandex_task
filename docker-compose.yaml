@@ -1,0 +1,28 @@
+version: '3.1'
+
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: app
+    ports:
+      - "80:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/yandex
+      - SPRING_DATASOURCE_USERNAME=yandex
+      - SPRING_DATASOURCE_PASSWORD=yandex
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  db:
+    image: 'postgres'
+    container_name: db
+    environment:
+      - POSTGRES_USER=yandex
+      - POSTGRES_PASSWORD=yandex
+      - POSTGRES_DB=yandex
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - .:/var/lib/postgresql/data
