@@ -28,7 +28,6 @@ public class ResponseUtils {
                 .atZoneSameInstant(ZoneId.of("+00:00"))
                 .format(dtf), null);
         List<Category> listChildrenCategory = category.getChildrenCategory();
-        System.out.println(category.getDateTime().format(dtf));
         List<Offer> offers = category.getOffers();
         int countChildren = offers.size() + listChildrenCategory.size();
         NodeResponse[] children = new NodeResponse[countChildren];
