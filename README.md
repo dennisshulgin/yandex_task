@@ -9,10 +9,12 @@
     <li>Docker</li>
   </ul>
   
-  In this API was released three basic functions:
-    - /imports POST
-    - /delete/{id} DELETE
-    - /nodes/{id} GET
+  <h4>In this API was released three basic functions:</h4>
+  <ul>
+    <li>/imports POST</li>
+    <li>/delete/{id} DELETE</li>
+    <li>/nodes/{id} GET</li>
+  </ul>
   
   For packaging a project you need to run a command:
     <h4>mvn clean package -DskipTests</h4>
@@ -22,4 +24,3 @@
    
   Stop an application:
     <h4>docker-compose down</h4>
-      
