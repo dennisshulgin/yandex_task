@@ -17,10 +17,10 @@
   </ul>
   
   For packaging a project you need to run a command:
-    <h4>mvn clean package -DskipTests</h4>
+    <b>mvn clean package -DskipTests</b>
     
   Start an application:
-    <h4>docker-compose up -d</h4>
+    <b>docker-compose up -d</b>
    
   Stop an application:
-    <h4>docker-compose down</h4>
+    <b>docker-compose down</b>
