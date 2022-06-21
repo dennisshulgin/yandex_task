@@ -1,11 +1,13 @@
   <h3>A test project for Yandex Academy 2022</h3>
   
   <h4>Enviroments:</h4>
-    - Java 8;
-    - Spring Boot;
-    - PostgreSQL;
-    - Maven;
-    - Docker.
+  <ul>
+    <li>Java 8</li>
+    <li>Spring Boot</li>
+    <li>PostgreSQL</li>
+    <li>Maven</li>
+    <li>Docker</li>
+  </ul>
   
   In this API was released three basic functions:
     - /imports POST
