@@ -12,10 +12,13 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
+    @Column(unique = true)
     private String code;
     private String name;
     private OffsetDateTime dateTime;
+    @Transient
+    private Long price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="parent_id", foreignKey=@ForeignKey(name = "FK_PARENT_ID"))
     private Category parentCategory;
@@ -32,17 +35,18 @@ public class Category {
     public Category() {
     }
 
-    public Category(String code, String name, OffsetDateTime dateTime) {
+    public Category(String code, String name, OffsetDateTime dateTime, Long price) {
         this.code = code;
         this.name = name;
         this.dateTime = dateTime;
+        this.price = price;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,6 +72,14 @@ public class Category {
 
     public void setDateTime(OffsetDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
     }
 
     public List<Offer> getOffers() {

@@ -38,7 +38,7 @@ public class MainController {
         }
         for (Item item : items.getItems()) {
             if(item.getType().equals("CATEGORY")) {
-                Category category = new Category(item.getId(), item.getName(), dateTime);
+                Category category = new Category(item.getId(), item.getName(), dateTime, item.getPrice());
                 categoryService.addCategory(category, item.getParentId());
             } else if(item.getType().equals("OFFER")) {
                 Offer offer = new Offer(item.getId(), item.getName(), dateTime);

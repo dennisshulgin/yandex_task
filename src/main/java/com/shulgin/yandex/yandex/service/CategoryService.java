@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface CategoryService {
-    void addCategory(Category category, String parentCategory);
+    boolean addCategory(Category category, String parentCategory);
     Category findCategoryByCode(String Code);
     boolean deleteCategory(String code);
     void saveCategory(Category category);

@@ -6,6 +6,7 @@ import com.shulgin.yandex.yandex.entity.Price;
 import com.shulgin.yandex.yandex.repository.OfferRepo;
 import com.shulgin.yandex.yandex.service.CategoryService;
 import com.shulgin.yandex.yandex.service.OfferService;
+import com.shulgin.yandex.yandex.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,16 @@ public class OfferServiceImpl implements OfferService {
     @Autowired
     private CategoryService categoryService;
 
-    public void addOffer(Offer offer, String parentCode, long price) {
+    @Autowired
+    private ValidationService validationService;
+
+    public boolean addOffer(Offer offer, String parentCode, long price) {
+        if(!(validationService.checkOfferId(offer.getId())
+            && validationService.checkOfferPrice(price)
+            && validationService.checkName(offer.getName())
+            && validationService.checkParentId(parentCode))) {
+            return false;
+        }
         OffsetDateTime dateTime = offer.getDateTime();
         Category category = categoryService.findCategoryByCode(parentCode);
         Offer oldOffer = offerRepo.findOfferById(offer.getId());
@@ -46,6 +56,7 @@ public class OfferServiceImpl implements OfferService {
             categoryService.saveCategory(category);
             category = category.getParentCategory();
         }
+        return true;
     }
 
     public boolean deleteOffer(String id) {
