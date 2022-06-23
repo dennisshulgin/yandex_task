@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 import static com.shulgin.yandex.yandex.util.ResponseUtils.buildCategory;
 import static com.shulgin.yandex.yandex.util.ResponseUtils.buildOffer;
@@ -49,8 +50,8 @@ public class MainController {
                 Category category = new Category(item.getId(), item.getName(), updateDate, item.getPrice());
                 categoryService.addCategory(category, item.getParentId());
             } else if(type.equals("OFFER")) {
-                Offer offer = new Offer(item.getId(), item.getName(), updateDate);
-                offerService.addOffer(offer, item.getParentId(), item.getPrice());
+                Offer offer = new Offer(item.getId(), item.getName(), updateDate, item.getPrice());
+                offerService.addOffer(offer, item.getParentId());
             }
         }
     }
@@ -72,5 +73,23 @@ public class MainController {
             return buildCategory(categoryFromDB);
         }
         throw new ItemNotFoundException();
+    }
+
+    @GetMapping("sales")
+    public NodeResponse[] sales(@RequestParam("date") String dateString) throws ValidationException{
+        OffsetDateTime dateTime;
+        try {
+            dateTime  = OffsetDateTime.parse(dateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        } catch (DateTimeParseException e) {
+            throw new ValidationException();
+        }
+        OffsetDateTime dateMinus24Hours = dateTime.minusHours(24);
+        List<Offer> offerList = offerService.getOffersWasChangedInPeriod(dateMinus24Hours, dateTime);
+        int size = offerList.size();
+        NodeResponse[] nodes = new NodeResponse[size];
+        for(int i = 0; i < size; i++) {
+            nodes[i] = buildOffer(offerList.get(i));
+        }
+        return nodes;
     }
 }

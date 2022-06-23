@@ -6,6 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Offer {
@@ -13,16 +14,16 @@ public class Offer {
     private String id;
     private String name;
     private OffsetDateTime dateTime;
+    private Long price;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Price> prices;
 
-    public Offer(String id, String name, OffsetDateTime dateTime) {
+    public Offer(String id, String name, OffsetDateTime dateTime, Long price) {
         this.id = id;
         this.name = name;
         this.dateTime = dateTime;
+        this.price = price;
     }
 
     public Offer() {
@@ -61,11 +62,11 @@ public class Offer {
         this.category = category;
     }
 
-    public List<Price> getPrices() {
-        return prices;
+    public Long getPrice() {
+        return price;
     }
 
-    public void setPrices(List<Price> prices) {
-        this.prices = prices;
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }

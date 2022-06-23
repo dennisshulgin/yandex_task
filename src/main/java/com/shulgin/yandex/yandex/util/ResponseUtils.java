@@ -12,8 +12,7 @@ public class ResponseUtils {
     private final static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
     public static NodeResponse buildOffer(Offer offer) {
-        int lastPriceIndex = offer.getPrices().size() - 1;
-        Long price = offer.getPrices().get(lastPriceIndex).getPrice();
+        Long price = offer.getPrice();
         String parentId = offer.getCategory() != null ? offer.getCategory().getCode() : null;
         String dateTimeString = offer.getDateTime().atZoneSameInstant(ZoneId.of("+00:00")).format(dtf);
         String name = offer.getName();

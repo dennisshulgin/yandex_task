@@ -30,12 +30,16 @@ public class CategoryServiceImpl implements CategoryService {
             category.setParentCategory(parentCategory);
             categoryRepo.save(category);
         }
-        while(parentCategory != null) {
-            parentCategory.setDateTime(updateDate);
-            categoryRepo.save(parentCategory);
-            parentCategory = parentCategory.getParentCategory();
-        }
+        updateDateParentCategories(parentCategory, updateDate);
         return true;
+    }
+
+    public void updateDateParentCategories(Category category, OffsetDateTime updateDate) {
+        while(category != null) {
+            category.setDateTime(updateDate);
+            categoryRepo.save(category);
+            category = category.getParentCategory();
+        }
     }
 
     public boolean deleteCategory(String code) {
