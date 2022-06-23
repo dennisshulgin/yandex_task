@@ -8,7 +8,7 @@ public class Item {
     private String name;
     private String id;
     private String parentId;
-    private long price;
+    private Long price;
 
     public String getType() {
         return type;
@@ -42,11 +42,11 @@ public class Item {
         this.parentId = parentId;
     }
 
-    public long getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 }

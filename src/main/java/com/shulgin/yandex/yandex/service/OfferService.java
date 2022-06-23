@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface OfferService {
-    boolean addOffer(Offer offer, String parentId, long price);
+    boolean addOffer(Offer offer, String parentId, Long price);
     boolean deleteOffer(String id);
     Offer findOfferById(String id);
 }

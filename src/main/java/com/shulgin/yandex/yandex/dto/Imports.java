@@ -3,7 +3,7 @@ package com.shulgin.yandex.yandex.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Items {
+public class Imports {
     private Item[] items;
     private String updateDate;
 

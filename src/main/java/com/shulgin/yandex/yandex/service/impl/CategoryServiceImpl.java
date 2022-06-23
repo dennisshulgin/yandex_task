@@ -3,7 +3,6 @@ package com.shulgin.yandex.yandex.service.impl;
 import com.shulgin.yandex.yandex.entity.Category;
 import com.shulgin.yandex.yandex.repository.CategoryRepo;
 import com.shulgin.yandex.yandex.service.CategoryService;
-import com.shulgin.yandex.yandex.service.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,40 +13,37 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepo categoryRepo;
 
-    @Autowired
-    private ValidationService validationService;
-
-    public boolean addCategory(Category category, String parentCategory) {
-        if(!(validationService.checkParentId(parentCategory)
-            && validationService.checkCategoryPrice(category.getPrice())
-            && validationService.checkName(category.getName())
-            && validationService.checkCategoryId(category.getCode()))) {
-            return false;
+    public boolean addCategory(Category category, String parentCategoryId) {
+        OffsetDateTime updateDate = category.getDateTime();
+        Category categoryFromDB = categoryRepo.findCategoryByCode(category.getCode());
+        Category parentCategory = categoryRepo.findCategoryByCode(parentCategoryId);
+        if(parentCategoryId != null && parentCategory == null) {
+            parentCategory = new Category(parentCategoryId, "undefined", updateDate, null);
+            categoryRepo.save(parentCategory);
         }
-        OffsetDateTime dateTime = category.getDateTime();
-        Category currentCategory = categoryRepo.findCategoryByCode(category.getCode());
-        Category parent = categoryRepo.findCategoryByCode(parentCategory);
-        if(currentCategory != null) {
-            currentCategory.setParentCategory(parent);
-            categoryRepo.save(currentCategory);
+        if(categoryFromDB != null) {
+            categoryFromDB.setName(category.getName());
+            categoryFromDB.setDateTime(updateDate);
+            categoryFromDB.setParentCategory(parentCategory);
+            categoryRepo.save(categoryFromDB);
         } else {
-            category.setParentCategory(parent);
+            category.setParentCategory(parentCategory);
             categoryRepo.save(category);
         }
-        while(parent != null) {
-            parent.setDateTime(dateTime);
-            categoryRepo.save(parent);
-            parent = parent.getParentCategory();
+        while(parentCategory != null) {
+            parentCategory.setDateTime(updateDate);
+            categoryRepo.save(parentCategory);
+            parentCategory = parentCategory.getParentCategory();
         }
         return true;
     }
 
     public boolean deleteCategory(String code) {
-        Category category = categoryRepo.findCategoryByCode(code);
-        if(category == null) {
+        Category categoryFromDB = categoryRepo.findCategoryByCode(code);
+        if(categoryFromDB == null) {
             return false;
         }
-        categoryRepo.delete(category);
+        categoryRepo.delete(categoryFromDB);
         return true;
     }
 

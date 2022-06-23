@@ -1,13 +1,14 @@
 package com.shulgin.yandex.yandex.controller;
 
+import com.shulgin.yandex.yandex.dto.Imports;
 import com.shulgin.yandex.yandex.dto.Item;
-import com.shulgin.yandex.yandex.dto.Items;
 import com.shulgin.yandex.yandex.response.NodeResponse;
 import com.shulgin.yandex.yandex.entity.Category;
 import com.shulgin.yandex.yandex.entity.Offer;
 import com.shulgin.yandex.yandex.exception.ItemNotFoundException;
 import com.shulgin.yandex.yandex.exception.ValidationException;
 import com.shulgin.yandex.yandex.service.CategoryService;
+import com.shulgin.yandex.yandex.service.ImportValidationService;
 import com.shulgin.yandex.yandex.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,23 +29,28 @@ public class MainController {
     @Autowired
     private OfferService offerService;
 
+    @Autowired
+    private ImportValidationService importValidationService;
+
     @PostMapping("imports")
-    public void imports(@RequestBody Items items) throws ValidationException{
-        OffsetDateTime dateTime;
+    public void imports(@RequestBody Imports importObject) throws ValidationException{
+        if (!importValidationService.isValidImportsData(importObject)) {
+            throw new ValidationException();
+        }
+        OffsetDateTime updateDate;
         try {
-            dateTime  = OffsetDateTime.parse(items.getUpdateDate(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            updateDate  = OffsetDateTime.parse(importObject.getUpdateDate(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         } catch (DateTimeParseException e) {
             throw new ValidationException();
         }
-        for (Item item : items.getItems()) {
-            if(item.getType().equals("CATEGORY")) {
-                Category category = new Category(item.getId(), item.getName(), dateTime, item.getPrice());
+        for (Item item : importObject.getItems()) {
+            String type = item.getType();
+            if(type.equals("CATEGORY")) {
+                Category category = new Category(item.getId(), item.getName(), updateDate, item.getPrice());
                 categoryService.addCategory(category, item.getParentId());
-            } else if(item.getType().equals("OFFER")) {
-                Offer offer = new Offer(item.getId(), item.getName(), dateTime);
+            } else if(type.equals("OFFER")) {
+                Offer offer = new Offer(item.getId(), item.getName(), updateDate);
                 offerService.addOffer(offer, item.getParentId(), item.getPrice());
-            } else {
-                throw new ValidationException();
             }
         }
     }
@@ -58,12 +64,12 @@ public class MainController {
 
     @GetMapping("nodes/{id}")
     public NodeResponse nodes(@PathVariable String id) throws ItemNotFoundException, ValidationException {
-        Category category = categoryService.findCategoryByCode(id);
-        Offer offer = offerService.findOfferById(id);
-        if(offer != null) {
-            return buildOffer(offer);
-        } else if(category != null) {
-            return buildCategory(category);
+        Category categoryFromDB = categoryService.findCategoryByCode(id);
+        Offer offerFromDB = offerService.findOfferById(id);
+        if(offerFromDB != null) {
+            return buildOffer(offerFromDB);
+        } else if(categoryFromDB != null) {
+            return buildCategory(categoryFromDB);
         }
         throw new ItemNotFoundException();
     }
