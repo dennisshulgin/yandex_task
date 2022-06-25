@@ -48,7 +48,11 @@ public class ResponseUtils {
         node.setChildren(children);
         node.setOfferCountInCategory(offerList.size() + offerCountInCategories);
         node.setOfferSumInCategory(currentOfferSum + offerSumInCategories);
-        node.setPrice(node.getOfferSumInCategory() / node.getOfferCountInCategory());
+        if (node.getOfferCountInCategory() == 0) {
+            node.setPrice(0L);
+        } else {
+            node.setPrice(node.getOfferSumInCategory() / node.getOfferCountInCategory());
+        }
         return node;
     }
 }
