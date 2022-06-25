@@ -53,12 +53,6 @@ IMPORT_BATCHES = [
     {
         "items": [
             {
-                "type": "CATEGORY",
-                "name": "Телевизоры",
-                "id": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
-                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
-            },
-            {
                 "type": "OFFER",
                 "name": "Samson 70\" LED UHD Smart",
                 "id": "98883e8f-0507-482f-bce2-2fb306cf6483",
@@ -66,11 +60,17 @@ IMPORT_BATCHES = [
                 "price": 32999
             },
             {
-                "type": "OFFER",
-                "name": "Phyllis 50\" LED UHD Smarter",
-                "id": "74b81fda-9cdc-4b63-8927-c978afed5cf4",
-                "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
-                "price": 49999
+                 "type": "OFFER",
+                 "name": "Phyllis 50\" LED UHD Smarter",
+                 "id": "74b81fda-9cdc-4b63-8927-c978afed5cf4",
+                 "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                 "price": 49999
+            },
+            {
+                "type": "CATEGORY",
+                "name": "Телевизоры",
+                "id": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
             }
         ],
         "updateDate": "2022-02-03T12:00:00.000Z"
@@ -79,10 +79,17 @@ IMPORT_BATCHES = [
         "items": [
             {
                 "type": "OFFER",
-                "name": "Goldstar 65\" LED UHD LOL Very Smart",
-                "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c65",
+                "name": "Samsung 12 HD",
+                "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c11",
                 "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
-                "price": 69999
+                "price": 69998
+            },
+            {
+                 "type": "OFFER",
+                 "name": "Samsund 14 LED",
+                 "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c11",
+                 "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                 "price": 69997
             }
         ],
         "updateDate": "2022-02-03T15:00:00.000Z"
