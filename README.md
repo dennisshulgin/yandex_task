@@ -9,11 +9,12 @@
     <li>Docker</li>
   </ul>
   
-  <h4>In this API was released three basic functions:</h4>
+  <h4>In this API was released four basic functions:</h4>
   <ul>
     <li>/imports POST</li>
     <li>/delete/{id} DELETE</li>
     <li>/nodes/{id} GET</li>
+    <li>/sales?date={DATE} GET</li>
   </ul>
   
   For packaging a project you need to run a command:
