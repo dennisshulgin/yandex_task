@@ -28,12 +28,6 @@ IMPORT_BATCHES = [
     {
         "items": [
             {
-                "type": "CATEGORY",
-                "name": "Смартфоны",
-                "id": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
-                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
-            },
-            {
                 "type": "OFFER",
                 "name": "jPhone 13",
                 "id": "863e1a7a-1304-42ae-943b-179184c077e3",
@@ -46,7 +40,14 @@ IMPORT_BATCHES = [
                 "id": "b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4",
                 "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
                 "price": 59999
+            },
+            {
+                "type": "CATEGORY",
+                "name": "Смартфоны",
+                "id": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
             }
+
         ],
         "updateDate": "2022-02-02T12:00:00.000Z"
     },
@@ -60,11 +61,11 @@ IMPORT_BATCHES = [
                 "price": 32999
             },
             {
-                 "type": "OFFER",
-                 "name": "Phyllis 50\" LED UHD Smarter",
-                 "id": "74b81fda-9cdc-4b63-8927-c978afed5cf4",
-                 "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
-                 "price": 49999
+                "type": "OFFER",
+                "name": "Phyllis 50\" LED UHD Smarter",
+                "id": "74b81fda-9cdc-4b63-8927-c978afed5cf4",
+                "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                "price": 49999
             },
             {
                 "type": "CATEGORY",
@@ -79,17 +80,10 @@ IMPORT_BATCHES = [
         "items": [
             {
                 "type": "OFFER",
-                "name": "Samsung 12 HD",
-                "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c11",
+                "name": "Goldstar 65\" LED UHD LOL Very Smart",
+                "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c65",
                 "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
-                "price": 69998
-            },
-            {
-                 "type": "OFFER",
-                 "name": "Samsund 14 LED",
-                 "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c11",
-                 "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
-                 "price": 69997
+                "price": 69999
             }
         ],
         "updateDate": "2022-02-03T15:00:00.000Z"
@@ -278,7 +272,7 @@ def test_delete():
 
 def test_all():
     test_import()
-    #test_nodes()
+    test_nodes()
     test_sales()
     #test_stats()
     #test_delete()

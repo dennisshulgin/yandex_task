@@ -1,104 +1,39 @@
 package com.shulgin.yandex.yandex;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.Assert;
+
+import java.nio.charset.StandardCharsets;
+
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource("/test-application.properties")
+@TestPropertySource(locations = "/test-application.properties")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class YandexApplicationTests {
 
 	@Autowired
 	private MockMvc mockMvc;
 
-	String[] jsonStrings = {
-			"{\n" +
-			"        \"items\": [\n" +
-			"            {\n" +
-			"                \"type\": \"CATEGORY\",\n" +
-			"                \"name\": \"Товары\",\n" +
-			"                \"id\": \"069cb8d7-bbdd-47d3-ad8f-82ef4c269df1\",\n" +
-			"                \"parentId\": null\n" +
-			"            }\n" +
-			"        ],\n" +
-			"        \"updateDate\": \"2022-02-01T12:00:00.000Z\"\n" +
-			"}",
-			"{\n" +
-					"        \"items\": [\n" +
-					"            {\n" +
-					"                \"type\": \"CATEGORY\",\n" +
-					"                \"name\": \"Смартфоны\",\n" +
-					"                \"id\": \"d515e43f-f3f6-4471-bb77-6b455017a2d2\",\n" +
-					"                \"parentId\": \"069cb8d7-bbdd-47d3-ad8f-82ef4c269df1\"\n" +
-					"            },\n" +
-					"            {\n" +
-					"                \"type\": \"OFFER\",\n" +
-					"                \"name\": \"jPhone 13\",\n" +
-					"                \"id\": \"863e1a7a-1304-42ae-943b-179184c077e3\",\n" +
-					"                \"parentId\": \"d515e43f-f3f6-4471-bb77-6b455017a2d2\",\n" +
-					"                \"price\": 79999\n" +
-					"            },\n" +
-					"            {\n" +
-					"                \"type\": \"OFFER\",\n" +
-					"                \"name\": \"Xomiа Readme 10\",\n" +
-					"                \"id\": \"b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4\",\n" +
-					"                \"parentId\": \"d515e43f-f3f6-4471-bb77-6b455017a2d2\",\n" +
-					"                \"price\": 59999\n" +
-					"            }\n" +
-					"        ],\n" +
-					"        \"updateDate\": \"2022-02-02T12:00:00.000Z\"\n" +
-					"}",
-			"{\n" +
-					"        \"items\": [\n" +
-					"            {\n" +
-					"                \"type\": \"OFFER\",\n" +
-					"                \"name\": \"Samson 70\\\" LED UHD Smart\",\n" +
-					"                \"id\": \"98883e8f-0507-482f-bce2-2fb306cf6483\",\n" +
-					"                \"parentId\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                \"price\": 32999\n" +
-					"            },\n" +
-					"            {\n" +
-					"                 \"type\": \"OFFER\",\n" +
-					"                 \"name\": \"Phyllis 50\\\" LED UHD Smarter\",\n" +
-					"                 \"id\": \"74b81fda-9cdc-4b63-8927-c978afed5cf4\",\n" +
-					"                 \"parentId\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                 \"price\": 49999\n" +
-					"            },\n" +
-					"            {\n" +
-					"                \"type\": \"CATEGORY\",\n" +
-					"                \"name\": \"Телевизоры\",\n" +
-					"                \"id\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                \"parentId\": \"069cb8d7-bbdd-47d3-ad8f-82ef4c269df1\"\n" +
-					"            }  \n" +
-					"        ],\n" +
-					"        \"updateDate\": \"2022-02-03T12:00:00.000Z\"\n" +
-					"}",
-			"{\n" +
-					"        \"items\": [\n" +
-					"            {\n" +
-					"                \"type\": \"OFFER\",\n" +
-					"                \"name\": \"Goldstar 65\\\" LED UHD LOL Very Smart\",\n" +
-					"                \"id\": \"73bc3b36-02d1-4245-ab35-3106c9ee1c65\",\n" +
-					"                \"parentId\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                \"price\": 69999\n" +
-					"            }\n" +
-					"        ],\n" +
-					"        \"updateDate\": \"2022-02-03T15:00:00.000Z\"\n" +
-					"}"
-	};
-
+	@Order(1)
 	@Test
-	void imports() throws Exception{
-		for(String json : jsonStrings) {
+	void importsTest() throws Exception {
+		for(String json : JsonStrings.CORRECT_IMPORT_STRINGS) {
 			mockMvc.perform(post("/imports")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(json))
@@ -106,66 +41,10 @@ class YandexApplicationTests {
 		}
 	}
 
-	String[] jsonStringsWithIncorrectParams = {
-			// одинаковые id
-			"{\n" +
-					"        \"items\": [\n" +
-					"            {\n" +
-					"                \"type\": \"OFFER\",\n" +
-					"                \"name\": \"Samsung 12 HD\",\n" +
-					"                \"id\": \"73bc3b36-02d1-4245-ab35-3106c9ee1c11\",\n" +
-					"                \"parentId\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                \"price\": 69998\n" +
-					"            }, \n" +
-					"            {\n" +
-					"                 \"type\": \"OFFER\",\n" +
-					"                 \"name\": \"Samsund 14 LED\",\n" +
-					"                 \"id\": \"73bc3b36-02d1-4245-ab35-3106c9ee1c11\",\n" +
-					"                 \"parentId\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                 \"price\": 69997\n" +
-					"            }\n" +
-					"        ],\n" +
-					"        \"updateDate\": \"2022-02-03T15:00:00.000Z\"\n" +
-					"}",
-			// Товар является родителем другого товара
-			"{\n" +
-					"        \"items\": [\n" +
-					"            {\n" +
-					"                \"type\": \"OFFER\",\n" +
-					"                \"name\": \"Samsung 12 HD\",\n" +
-					"                \"id\": \"73bc3b36-02d1-4245-ab35-3106c9ee1c19\",\n" +
-					"                \"parentId\": \"73bc3b36-02d1-4245-ab35-3106c9ee1c11\",\n" +
-					"                \"price\": 69998\n" +
-					"            }, \n" +
-					"            {\n" +
-					"                 \"type\": \"OFFER\",\n" +
-					"                 \"name\": \"Samsund 14 LED\",\n" +
-					"                 \"id\": \"73bc3b36-02d1-4245-ab35-3106c9ee1c11\",\n" +
-					"                 \"parentId\": \"1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2\",\n" +
-					"                 \"price\": 69997\n" +
-					"            }\n" +
-					"        ],\n" +
-					"        \"updateDate\": \"2022-02-03T15:00:00.000Z\"\n" +
-					"}",
-			// Цена у категории
-			"{\n" +
-					"        \"items\": [\n" +
-					"            {\n" +
-					"                \"type\": \"CATEGORY\",\n" +
-					"                \"name\": \"Товары\",\n" +
-					"                \"id\": \"069cb8d7-bbdd-47d3-ad8f-82ef4c269df1\",\n" +
-					"                \"parentId\": null\n" +
-					"				 \"price\": 12345\n" +
-					"            }\n" +
-					"        ],\n" +
-					"        \"updateDate\": \"2022-02-01T12:00:00.000Z\"\n" +
-					"}",
-
-	};
-
+	@Order(2)
 	@Test
-	void importsIncorrect() throws Exception {
-		for(String json : jsonStringsWithIncorrectParams) {
+	void incorrectImportsTest() throws Exception {
+		for(String json : JsonStrings.INCORRECT_IMPORT_STRINGS) {
 			mockMvc.perform(post("/imports")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(json))
@@ -174,4 +53,82 @@ class YandexApplicationTests {
 					.andExpect(jsonPath("$.message", is("Validation Failed")));
 		}
 	}
+
+	@Order(3)
+	@Test
+	void nodesTest() throws Exception {
+		String responseString = mockMvc.perform(get("/nodes/069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		String decodeResponseString = new String(responseString.getBytes(StandardCharsets.ISO_8859_1));
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode tree1 = mapper.readTree(decodeResponseString);
+		JsonNode tree2 = mapper.readTree(JsonStrings.EXPECTED_TREE);
+		boolean areTheyEqual = tree1.equals(tree2);
+		Assert.isTrue(areTheyEqual, "Trees are not equals");
+	}
+
+	@Order(4)
+	@Test
+	void nodesNotFoundTest() throws Exception {
+		mockMvc.perform(get("/nodes/d515e43f-f3f6-4471-bb77-6b5666017a2d2"))
+				.andExpect(status().is(404))
+				.andExpect(jsonPath("$.code", is(404)))
+				.andExpect(jsonPath("$.message", is("Item not found")));
+	}
+
+	@Order(5)
+	@Test
+	void deleteTest() throws Exception {
+		mockMvc.perform(delete("/delete/d515e43f-f3f6-4471-bb77-6b455017a2d2"))
+				.andExpect(status().isOk());
+		String responseString = mockMvc.perform(get("/nodes/069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		String decodeResponseString = new String(responseString.getBytes(StandardCharsets.ISO_8859_1));
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode tree1 = mapper.readTree(decodeResponseString);
+		JsonNode tree2 = mapper.readTree(JsonStrings.EXPECTED_TREE_AFTER_DELETE);
+		boolean areTheyEqual = tree1.equals(tree2);
+		Assert.isTrue(areTheyEqual, "Trees are not equals");
+	}
+
+	@Order(6)
+	@Test
+	void deleteNotFoundTest() throws Exception {
+		mockMvc.perform(delete("/delete/d515e43f-f3f6-4471-bb77-6b5666017a2d2"))
+				.andExpect(status().is(404))
+				.andExpect(jsonPath("$.code", is(404)))
+				.andExpect(jsonPath("$.message", is("Item not found")));
+	}
+
+	@Order(7)
+	@Test
+	void salesTest() throws Exception {
+		String responseString = mockMvc.perform(get("/sales?date=2022-02-03T19:00:00.000Z"))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		String decodeResponseString = new String(responseString.getBytes(StandardCharsets.ISO_8859_1));
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode tree1 = mapper.readTree(decodeResponseString);
+		JsonNode tree2 = mapper.readTree(JsonStrings.EXPECTED_TREE_SALES);
+		boolean areTheyEqual = tree1.equals(tree2);
+		Assert.isTrue(areTheyEqual, "Trees are not equals");
+	}
+
+	@Order(8)
+	@Test
+	void salesIncorrectDateTest() throws Exception {
+		mockMvc.perform(get("/sales?date=2022-02-03"))
+				.andExpect(status().is(400))
+				.andExpect(jsonPath("$.code", is(400)))
+				.andExpect(jsonPath("$.message", is("Validation Failed")));
+	}
+
 }

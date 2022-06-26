@@ -5,6 +5,7 @@ import com.shulgin.yandex.yandex.dto.Item;
 import com.shulgin.yandex.yandex.entity.Category;
 import com.shulgin.yandex.yandex.service.CategoryService;
 import com.shulgin.yandex.yandex.service.ImportValidationService;
+import com.shulgin.yandex.yandex.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,9 @@ import java.util.HashSet;
 public class ImportValidationServiceImpl implements ImportValidationService {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private OfferService offerService;
 
     private final HashSet<String> categoriesIdSet = new HashSet<>();
     private final HashSet<String> offersIdSet = new HashSet<>();
@@ -73,6 +77,9 @@ public class ImportValidationServiceImpl implements ImportValidationService {
         if(categoriesIdSet.contains(id) || offersIdSet.contains(id)) {
             return false;
         }
+        if(categoryService.findCategoryByCode(id) != null) {
+            return false;
+        }
         offersIdSet.add(id);
         return true;
 
@@ -92,6 +99,9 @@ public class ImportValidationServiceImpl implements ImportValidationService {
             return false;
         }
         if(categoriesIdSet.contains(id) || offersIdSet.contains(id)) {
+            return false;
+        }
+        if(offerService.findOfferById(id) != null) {
             return false;
         }
         categoriesIdSet.add(id);
